@@ -1,0 +1,109 @@
+---
+source: crates/relate-semantic/tests/scenario_onboarding.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "compliance",
+    "args": [
+      "remember",
+      "address-proof",
+      "--claim",
+      "A utility bill under 3 months old is proof of address.",
+      "--about",
+      "address",
+      "--about",
+      "documents",
+      "--scope",
+      "org",
+      "--because",
+      "Compliance memo CM-3."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "address-proof",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "compliance",
+    "args": [
+      "recall",
+      "--about",
+      "address",
+      "--scope",
+      "case-app-5",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "address",
+            "documents"
+          ],
+          "agent": "compliance",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Compliance memo CM-3.",
+          "claim": "A utility bill under 3 months old is proof of address.",
+          "generation": 1,
+          "key": "address-proof",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "compliance",
+    "args": [
+      "correct",
+      "address-proof",
+      "--scope",
+      "org",
+      "--claim",
+      "A utility bill or a bank statement under 3 months old is proof of address.",
+      "--about",
+      "proof-of-address",
+      "--about",
+      "documents",
+      "--because",
+      "Compliance memo CM-4 replaced CM-3."
+    ],
+    "now": "2026-11-11T18:00:00Z",
+    "out": {
+      "at": "2026-11-11T18:00:00Z",
+      "generation": 2,
+      "key": "address-proof",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "compliance",
+    "args": [
+      "recall",
+      "--about",
+      "address",
+      "--scope",
+      "case-app-5",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-11T18:00:00Z",
+    "out": {
+      "about": [
+        "address"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-app-5",
+        "org"
+      ]
+    }
+  }
+]

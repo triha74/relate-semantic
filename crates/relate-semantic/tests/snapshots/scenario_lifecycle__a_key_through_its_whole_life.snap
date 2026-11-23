@@ -1,0 +1,460 @@
+---
+source: crates/relate-semantic/tests/scenario_lifecycle.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "northwind"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": []
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--scope",
+      "org",
+      "--because",
+      "Read from the agreement while checking INV-1042."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from the agreement while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--fresh",
+      "30d"
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "action": "stale",
+      "fresh": "30d",
+      "memories": [
+        {
+          "about": [
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from the agreement while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ],
+      "stale": [
+        "widget-price"
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "correct",
+      "widget-price",
+      "--scope",
+      "org",
+      "--claim",
+      "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2025",
+      "--because",
+      "NW-2025 replaced NW-2024 on 2026-12-01."
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "at": "2026-12-20T18:00:00Z",
+      "generation": 2,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--fresh",
+      "30d"
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "northwind",
+            "nw-2025"
+          ],
+          "agent": "invoices",
+          "at": "2026-12-20T18:00:00Z",
+          "because": "NW-2025 replaced NW-2024 on 2026-12-01.",
+          "claim": "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+          "generation": 2,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "nw-2024"
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "about": [
+        "nw-2024"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": []
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "forget",
+      "widget-price",
+      "--scope",
+      "org",
+      "--because",
+      "Prices are under renegotiation."
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "at": "2026-12-20T18:00:00Z",
+      "forgotten": true,
+      "generation": 3,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "show",
+      "widget-price"
+    ],
+    "now": "2026-12-20T18:00:00Z",
+    "out": {
+      "error": {
+        "code": "no_memory",
+        "fix": "relate-semantic log widget-price",
+        "message": "widget-price was forgotten in every scope",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--scope",
+      "org",
+      "--because",
+      "Renegotiation ended with NW-2025 unchanged."
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "at": "2026-12-21T18:00:00Z",
+      "generation": 4,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Case 7 pays $90 per widget.",
+      "--about",
+      "northwind",
+      "--scope",
+      "case-7",
+      "--because",
+      "Approved by finance for case 7."
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "at": "2026-12-21T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "case-7"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind"
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "action": "conflict",
+      "fix": "relate-semantic recall --key widget-price --scope case-7 --scope org",
+      "key": "widget-price",
+      "scopes": [
+        "case-7",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--scope",
+      "case-7",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "northwind"
+          ],
+          "agent": "invoices",
+          "at": "2026-12-21T18:00:00Z",
+          "because": "Approved by finance for case 7.",
+          "claim": "Case 7 pays $90 per widget.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "case-7"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "payment-terms",
+      "--claim",
+      "Northwind pays net 30.",
+      "--about",
+      "northwind",
+      "--scope",
+      "org",
+      "--because",
+      "NW-2025 section 5."
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "at": "2026-12-21T18:00:00Z",
+      "generation": 1,
+      "key": "payment-terms",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--scope",
+      "org",
+      "--scope",
+      "case-7",
+      "--limit",
+      "1"
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "action": "narrow",
+      "fix": "relate-semantic recall --about northwind --key payment-terms --scope org --scope case-7",
+      "keys": [
+        {
+          "about": [
+            "northwind"
+          ],
+          "key": "payment-terms",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "northwind"
+          ],
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ],
+      "limit": 1,
+      "matched": 2
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "prune",
+      "--scope",
+      "case-7"
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "generations": 1,
+      "keys": 1,
+      "pruned": "case-7"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "log",
+      "widget-price"
+    ],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "generations": [
+        {
+          "about": [
+            "northwind"
+          ],
+          "agent": "invoices",
+          "at": "2026-12-21T18:00:00Z",
+          "because": "Renegotiation ended with NW-2025 unchanged.",
+          "claim": "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+          "forgotten": false,
+          "generation": 4,
+          "key": "widget-price",
+          "live": true,
+          "scope": "org"
+        },
+        {
+          "about": [],
+          "agent": "invoices",
+          "at": "2026-12-20T18:00:00Z",
+          "because": "Prices are under renegotiation.",
+          "claim": null,
+          "forgotten": true,
+          "generation": 3,
+          "key": "widget-price",
+          "live": false,
+          "scope": "org"
+        },
+        {
+          "about": [
+            "northwind",
+            "nw-2025"
+          ],
+          "agent": "invoices",
+          "at": "2026-12-20T18:00:00Z",
+          "because": "NW-2025 replaced NW-2024 on 2026-12-01.",
+          "claim": "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+          "forgotten": false,
+          "generation": 2,
+          "key": "widget-price",
+          "live": false,
+          "scope": "org"
+        },
+        {
+          "about": [
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from the agreement while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "forgotten": false,
+          "generation": 1,
+          "key": "widget-price",
+          "live": false,
+          "scope": "org"
+        }
+      ],
+      "key": "widget-price"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [],
+    "now": "2026-12-21T18:00:00Z",
+    "out": {
+      "scopes": [
+        {
+          "generations": 5,
+          "live": 2,
+          "name": "org"
+        }
+      ]
+    }
+  }
+]

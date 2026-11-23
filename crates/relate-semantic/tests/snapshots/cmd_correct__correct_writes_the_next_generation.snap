@@ -1,0 +1,10 @@
+---
+source: crates/relate-semantic/tests/cmd_correct.rs
+expression: out
+---
+{
+  "at": "2026-11-17T17:00:00Z",
+  "generation": 2,
+  "key": "widget-price",
+  "scope": "org"
+}

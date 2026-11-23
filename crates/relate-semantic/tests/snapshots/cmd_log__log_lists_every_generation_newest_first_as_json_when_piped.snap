@@ -1,0 +1,67 @@
+---
+source: crates/relate-semantic/tests/cmd_log.rs
+expression: out
+---
+{
+  "generations": [
+    {
+      "about": [],
+      "agent": "finance",
+      "at": "2026-11-14T09:00:00Z",
+      "because": "Under renegotiation.",
+      "claim": null,
+      "forgotten": true,
+      "generation": 3,
+      "key": "widget-price",
+      "live": false,
+      "scope": "org"
+    },
+    {
+      "about": [
+        "northwind"
+      ],
+      "agent": "invoices",
+      "at": "2026-11-13T09:00:00Z",
+      "because": "test",
+      "claim": "widget-price in case-inv-1042",
+      "forgotten": false,
+      "generation": 1,
+      "key": "widget-price",
+      "live": true,
+      "scope": "case-inv-1042"
+    },
+    {
+      "about": [
+        "discounts",
+        "northwind",
+        "nw-2024"
+      ],
+      "agent": "invoices",
+      "at": "2026-11-12T09:00:00Z",
+      "because": "NW-2025 signed.",
+      "claim": "Under NW-2025, widgets are $110, with 10% off a widget line over $5000.",
+      "forgotten": false,
+      "generation": 2,
+      "key": "widget-price",
+      "live": false,
+      "scope": "org"
+    },
+    {
+      "about": [
+        "discounts",
+        "northwind",
+        "nw-2024"
+      ],
+      "agent": "invoices",
+      "at": "2026-11-10T18:00:00Z",
+      "because": "Read from the agreement while checking INV-1042.",
+      "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "forgotten": false,
+      "generation": 1,
+      "key": "widget-price",
+      "live": false,
+      "scope": "org"
+    }
+  ],
+  "key": "widget-price"
+}

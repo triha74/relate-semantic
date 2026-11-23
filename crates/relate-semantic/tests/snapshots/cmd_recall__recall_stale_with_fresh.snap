@@ -1,0 +1,27 @@
+---
+source: crates/relate-semantic/tests/cmd_recall.rs
+expression: redact(&out)
+---
+{
+  "action": "stale",
+  "fresh": "30d",
+  "memories": [
+    {
+      "about": [
+        "discounts",
+        "northwind",
+        "nw-2024"
+      ],
+      "agent": "invoices",
+      "at": "[time]",
+      "because": "Read from the agreement while checking INV-1042.",
+      "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  ],
+  "stale": [
+    "widget-price"
+  ]
+}

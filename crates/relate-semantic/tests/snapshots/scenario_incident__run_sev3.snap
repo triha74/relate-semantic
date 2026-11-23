@@ -1,0 +1,68 @@
+---
+source: crates/relate-semantic/tests/scenario_incident.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "severity"
+    ],
+    "now": "2026-12-25T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "severity",
+            "triage"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Incident policy IP-2, 2026-03-01.",
+          "claim": "Sev1 means checkout or login is down for every customer. Sev2 means a feature is degraded. Anything else is sev3.",
+          "generation": 1,
+          "key": "severity-guide",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "dashboards",
+      "--about",
+      "runbook",
+      "--fresh",
+      "30d"
+    ],
+    "now": "2026-12-25T18:00:00Z",
+    "out": {
+      "action": "stale",
+      "fresh": "30d",
+      "memories": [
+        {
+          "about": [
+            "dashboards",
+            "runbook"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "INC-288: refreshing the cache fixed the revenue chart.",
+          "claim": "A stale chart is fixed by refreshing the chart cache from the dashboards admin page.",
+          "generation": 1,
+          "key": "chart-refresh",
+          "scope": "org"
+        }
+      ],
+      "stale": [
+        "chart-refresh"
+      ]
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[package]
+name = "relate-semantic-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "Memory admission and recall library for relate-semantic"
+
+[dependencies]
+relate.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+relate.workspace = true
+tempfile = "3"

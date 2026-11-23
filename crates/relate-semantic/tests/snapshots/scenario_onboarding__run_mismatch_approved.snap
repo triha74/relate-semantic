@@ -1,0 +1,87 @@
+---
+source: crates/relate-semantic/tests/scenario_onboarding.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "kyc",
+    "args": [
+      "recall",
+      "--about",
+      "name-mismatch",
+      "--scope",
+      "case-app-2",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "name-mismatch"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-app-2",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "remember",
+      "transliterated-names",
+      "--agent",
+      "compliance",
+      "--claim",
+      "A name that differs from the document only by transliteration, such as Aleksandr and Alexander, is approved when the date of birth and document number match.",
+      "--about",
+      "name-mismatch",
+      "--about",
+      "transliteration",
+      "--scope",
+      "org",
+      "--because",
+      "Compliance approved APP-2 with the corrected name on 2026-11-10."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "transliterated-names",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "recall",
+      "--about",
+      "name-mismatch",
+      "--scope",
+      "case-app-7",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-12T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "name-mismatch",
+            "transliteration"
+          ],
+          "agent": "compliance",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Compliance approved APP-2 with the corrected name on 2026-11-10.",
+          "claim": "A name that differs from the document only by transliteration, such as Aleksandr and Alexander, is approved when the date of birth and document number match.",
+          "generation": 1,
+          "key": "transliterated-names",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

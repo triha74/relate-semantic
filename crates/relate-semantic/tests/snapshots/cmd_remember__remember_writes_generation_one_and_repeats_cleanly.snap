@@ -1,0 +1,10 @@
+---
+source: crates/relate-semantic/tests/cmd_remember.rs
+expression: redact(&first)
+---
+{
+  "at": "[time]",
+  "generation": 1,
+  "key": "widget-price",
+  "scope": "org"
+}

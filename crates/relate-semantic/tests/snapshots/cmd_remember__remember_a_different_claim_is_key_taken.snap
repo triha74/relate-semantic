@@ -1,0 +1,12 @@
+---
+source: crates/relate-semantic/tests/cmd_remember.rs
+expression: err
+---
+{
+  "error": {
+    "code": "key_taken",
+    "fix": "relate-semantic correct widget-price --scope org --claim TEXT --because TEXT",
+    "message": "widget-price is already live in org: \"Under NW-2024, widgets are $100, with 10% off a widget line over $5000.\"",
+    "retryable": false
+  }
+}

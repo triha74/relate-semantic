@@ -1,0 +1,63 @@
+---
+source: crates/relate-semantic/tests/scenario_onboarding.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "kyc",
+    "args": [
+      "remember",
+      "sanctioned-entity",
+      "--agent",
+      "compliance",
+      "--claim",
+      "Orion Trading LLC is on the EU sanctions list. Decline any application where it is a beneficial owner.",
+      "--about",
+      "orion-trading",
+      "--about",
+      "sanctions",
+      "--scope",
+      "org",
+      "--because",
+      "Screening hit on APP-3, confirmed by compliance on 2026-11-10."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "sanctioned-entity",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "recall",
+      "--about",
+      "orion-trading",
+      "--scope",
+      "case-app-8",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-15T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "orion-trading",
+            "sanctions"
+          ],
+          "agent": "compliance",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Screening hit on APP-3, confirmed by compliance on 2026-11-10.",
+          "claim": "Orion Trading LLC is on the EU sanctions list. Decline any application where it is a beneficial owner.",
+          "generation": 1,
+          "key": "sanctioned-entity",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

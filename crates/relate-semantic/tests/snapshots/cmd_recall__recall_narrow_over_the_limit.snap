@@ -1,0 +1,33 @@
+---
+source: crates/relate-semantic/tests/cmd_recall.rs
+expression: out
+---
+{
+  "action": "narrow",
+  "fix": "relate-semantic recall --about northwind --key a",
+  "keys": [
+    {
+      "about": [
+        "northwind"
+      ],
+      "key": "a",
+      "scope": "org"
+    },
+    {
+      "about": [
+        "northwind"
+      ],
+      "key": "b",
+      "scope": "org"
+    },
+    {
+      "about": [
+        "northwind"
+      ],
+      "key": "c",
+      "scope": "org"
+    }
+  ],
+  "limit": 2,
+  "matched": 3
+}

@@ -1,0 +1,90 @@
+name: CI
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sonic-init:
+    name: Sonic init
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: triha74/gosonic
+          ref: 36b8e47f575c2436515e3ba5f4819771131e83ff
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build gosonic
+        run: CGO_ENABLED=0 go build -o gosonic .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gosonic
+          path: gosonic
+          if-no-files-found: error
+
+  lint:
+    name: lint
+    needs: sonic-init
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/gosonic
+        with:
+          stage: lint
+          cache-target: lint
+
+  build:
+    name: build
+    needs: sonic-init
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/gosonic
+        with:
+          stage: build
+          cache-target: build
+
+  test:
+    name: test
+    needs: sonic-init
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/gosonic
+        with:
+          stage: test
+          cache-target: test
+
+  coverage:
+    name: coverage
+    needs: sonic-init
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/gosonic
+        with:
+          stage: coverage
+          cache-target: coverage
+
+  examples:
+    name: examples (${{ matrix.scenario }})
+    needs: sonic-init
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [invoice, incident, onboarding]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/gosonic
+        with:
+          stage: examples
+          matrix: scenario=${{ matrix.scenario }}
+          cache-target: examples-${{ matrix.scenario }}

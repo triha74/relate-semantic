@@ -1,0 +1,11 @@
+---
+source: crates/relate-semantic/tests/cmd_skill.rs
+expression: installed
+---
+{
+  "agents": [
+    "cursor"
+  ],
+  "skill": "relate-semantic",
+  "version": "0.1.0"
+}

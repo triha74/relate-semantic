@@ -1,0 +1,121 @@
+---
+source: crates/relate-semantic/tests/scenario_incident.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "severity",
+      "--scope",
+      "case-inc-311",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "severity",
+            "triage"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Incident policy IP-2, 2026-03-01.",
+          "claim": "Sev1 means checkout or login is down for every customer. Sev2 means a feature is degraded. Anything else is sev3.",
+          "generation": 1,
+          "key": "severity-guide",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "checkout",
+      "--about",
+      "runbook",
+      "--scope",
+      "case-inc-311",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "checkout",
+        "runbook"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-inc-311",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "remember",
+      "checkout-runbook",
+      "--claim",
+      "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy.",
+      "--about",
+      "checkout",
+      "--about",
+      "runbook",
+      "--scope",
+      "org",
+      "--because",
+      "INC-311: draining and rolling back restored checkout in 12 minutes. PM-14."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "checkout-runbook",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "checkout",
+      "--about",
+      "runbook",
+      "--scope",
+      "case-inc-320",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-20T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "checkout",
+            "runbook"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "INC-311: draining and rolling back restored checkout in 12 minutes. PM-14.",
+          "claim": "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy.",
+          "generation": 1,
+          "key": "checkout-runbook",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

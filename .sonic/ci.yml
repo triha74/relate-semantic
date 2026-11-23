@@ -1,0 +1,117 @@
+# Portable stages. GitHub Actions builds gosonic and runs one stage per job.
+#   gosonic ci run build
+#   gosonic ci run smoke-test
+#   gosonic ci run full-test
+#   gosonic ci run examples
+#   gosonic ci run examples --matrix scenario=invoice
+version: "1"
+project:
+  name: relate-semantic
+  language: rust
+  root: "."
+
+runners:
+  docker-cli: docker.io/library/docker:27-cli
+  sonic-rust: localhost/relate-semantic-sonic-rust:1.88
+
+matrix:
+  scenario:
+    - name: invoice
+      priority: 1
+    - name: incident
+      priority: 2
+    - name: onboarding
+      priority: 3
+
+actions:
+  build-sonic-rust:
+    runner: docker-cli
+    docker_socket: true
+    user: root
+    once: true
+    environment:
+      DOCKER_CONFIG: /tmp/docker-config
+    commands:
+      - docker build -t localhost/relate-semantic-sonic-rust:1.88 -f .sonic/docker/sonic-rust.Dockerfile .sonic/docker
+
+suites:
+  smoke-test:
+    - lint
+    - build
+    - test
+  full-test:
+    - lint
+    - build
+    - test
+    - coverage
+    - examples
+  all-examples:
+    - examples
+
+stages:
+  lint:
+    runner: sonic-rust
+    before: &before-rust
+      - build-sonic-rust
+    environment: &cargo-env
+      CARGO_HOME: /cargo-home
+      CARGO_TARGET_DIR: /cargo-target/lint
+    volumes: &cargo-cache
+      - type: cache
+        source: cargo-home
+        target: /cargo-home
+      - type: cache
+        source: cargo-target
+        target: /cargo-target
+    commands:
+      - cargo fmt --all --check
+      - cargo clippy --workspace --all-targets -- -D warnings
+
+  build:
+    runner: sonic-rust
+    before: *before-rust
+    environment:
+      <<: *cargo-env
+      CARGO_TARGET_DIR: /out
+    volumes:
+      - type: cache
+        source: cargo-home
+        target: /cargo-home
+      - type: bind
+        source: ./target/sonic
+        target: /out
+    commands:
+      - cargo build --workspace --release
+
+  test:
+    runner: sonic-rust
+    before: *before-rust
+    environment:
+      <<: *cargo-env
+      CARGO_TARGET_DIR: /cargo-target/test
+    volumes: *cargo-cache
+    commands:
+      - cargo test --workspace
+
+  coverage:
+    runner: sonic-rust
+    before: *before-rust
+    environment:
+      <<: *cargo-env
+      CARGO_TARGET_DIR: /cargo-target/coverage
+    volumes: *cargo-cache
+    commands:
+      - cargo llvm-cov --workspace --fail-under-lines 95
+
+  examples:
+    runner: sonic-rust
+    shell: bash
+    matrix: [scenario]
+    before: *before-rust
+    environment:
+      <<: *cargo-env
+      CARGO_TARGET_DIR: /workspace/target/sonic
+    volumes: *cargo-cache
+    commands:
+      - cargo build --release -p relate-semantic
+      - RELATE_SEMANTIC_BIN=/workspace/target/sonic/release/relate-semantic bash examples/run-scenario.sh "$scenario"

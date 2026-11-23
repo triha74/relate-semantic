@@ -1,0 +1,12 @@
+---
+source: crates/relate-semantic/tests/cmd_correct.rs
+expression: err
+---
+{
+  "error": {
+    "code": "no_memory",
+    "fix": "relate-semantic remember widget-price --claim TEXT --about SUBJ --scope org --because TEXT",
+    "message": "widget-price is not live in org",
+    "retryable": false
+  }
+}

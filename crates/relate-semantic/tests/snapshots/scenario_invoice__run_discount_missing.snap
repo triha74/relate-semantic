@@ -1,0 +1,133 @@
+---
+source: crates/relate-semantic/tests/scenario_invoice.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "discounts",
+      "--scope",
+      "case-inv-1042",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "northwind",
+        "discounts"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-inv-1042",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--about",
+      "discounts",
+      "--scope",
+      "org",
+      "--because",
+      "Read from NW-2024 section 3 while checking INV-1042."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "shortfall-handling",
+      "--claim",
+      "When a Northwind invoice omits the NW-2024 discount, pay the agreed total, not the billed total.",
+      "--about",
+      "northwind",
+      "--about",
+      "discounts",
+      "--about",
+      "shortfall",
+      "--scope",
+      "org",
+      "--because",
+      "REV-19 approved $9,000 for INV-1042 on 2026-11-10."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "shortfall-handling",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "discounts",
+      "--scope",
+      "case-inv-1077",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-17T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "discounts",
+            "northwind",
+            "shortfall"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "REV-19 approved $9,000 for INV-1042 on 2026-11-10.",
+          "claim": "When a Northwind invoice omits the NW-2024 discount, pay the agreed total, not the billed total.",
+          "generation": 1,
+          "key": "shortfall-handling",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "discounts",
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from NW-2024 section 3 while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

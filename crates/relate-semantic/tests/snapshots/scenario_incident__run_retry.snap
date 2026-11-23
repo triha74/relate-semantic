@@ -1,0 +1,116 @@
+---
+source: crates/relate-semantic/tests/scenario_incident.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "oncall",
+    "args": [
+      "remember",
+      "rollback-blocked",
+      "--claim",
+      "The rollback is refused while the deploy lock is held.",
+      "--about",
+      "checkout",
+      "--about",
+      "rollback",
+      "--scope",
+      "case-inc-313",
+      "--because",
+      "mitigate attempt 1 failed with \"rollback refused\"."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "rollback-blocked",
+      "scope": "case-inc-313"
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "rollback",
+      "--scope",
+      "case-inc-313"
+    ],
+    "now": "2026-11-10T18:20:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "checkout",
+            "rollback"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "mitigate attempt 1 failed with \"rollback refused\".",
+          "claim": "The rollback is refused while the deploy lock is held.",
+          "generation": 1,
+          "key": "rollback-blocked",
+          "scope": "case-inc-313"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "forget",
+      "rollback-blocked",
+      "--scope",
+      "case-inc-313",
+      "--because",
+      "The lock cleared and the retried rollback stuck."
+    ],
+    "now": "2026-11-10T18:20:00Z",
+    "out": {
+      "at": "2026-11-10T18:20:00Z",
+      "forgotten": true,
+      "generation": 2,
+      "key": "rollback-blocked",
+      "scope": "case-inc-313"
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "forget",
+      "rollback-blocked",
+      "--scope",
+      "case-inc-313",
+      "--because",
+      "The lock cleared and the retried rollback stuck."
+    ],
+    "now": "2026-11-10T18:20:00Z",
+    "out": {
+      "forgotten": false,
+      "key": "rollback-blocked",
+      "scope": "case-inc-313"
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "rollback",
+      "--scope",
+      "case-inc-313"
+    ],
+    "now": "2026-11-10T18:20:00Z",
+    "out": {
+      "about": [
+        "rollback"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-inc-313"
+      ]
+    }
+  }
+]

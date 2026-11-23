@@ -1,0 +1,9 @@
+---
+source: crates/relate-semantic/tests/cmd_prune.rs
+expression: out
+---
+{
+  "generations": 2,
+  "keys": 2,
+  "pruned": "case-inv-1042"
+}

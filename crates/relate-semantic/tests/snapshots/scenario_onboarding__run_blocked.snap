@@ -1,0 +1,120 @@
+---
+source: crates/relate-semantic/tests/scenario_onboarding.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "kyc",
+    "args": [
+      "remember",
+      "app-4-document",
+      "--claim",
+      "OCR: P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## P<UTO#### ?? unreadable ## ",
+      "--about",
+      "passport-scan",
+      "--scope",
+      "case-app-4",
+      "--because",
+      "verify-identity blocked: the document image is unreadable."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "error": {
+        "code": "too_long",
+        "errors": [
+          {
+            "code": "too_long",
+            "field": "claim",
+            "fix": "write only the fact in --claim, and put the source in --because",
+            "message": "--claim is 815 characters and the limit is 600"
+          }
+        ],
+        "fix": "relate-semantic remember app-4-document --claim TEXT --about passport-scan --scope case-app-4 --because TEXT",
+        "message": "--claim is 815 characters and the limit is 600",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "remember",
+      "app-4-document",
+      "--claim",
+      "The passport scan for APP-4 is unreadable. Ask the applicant for a new scan.",
+      "--about",
+      "Passport Scan",
+      "--scope",
+      "case-app-4",
+      "--because",
+      "verify-identity blocked: the document image is unreadable."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "error": {
+        "code": "bad_slug",
+        "errors": [
+          {
+            "code": "bad_slug",
+            "field": "about",
+            "fix": "pass --about passport-scan",
+            "message": "--about 'Passport Scan' is not a slug"
+          }
+        ],
+        "fix": "relate-semantic remember app-4-document --claim TEXT --about passport-scan --scope case-app-4 --because TEXT",
+        "message": "--about 'Passport Scan' is not a slug",
+        "retryable": false
+      }
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "remember",
+      "app-4-document",
+      "--claim",
+      "The passport scan for APP-4 is unreadable. Ask the applicant for a new scan.",
+      "--about",
+      "passport-scan",
+      "--scope",
+      "case-app-4",
+      "--because",
+      "verify-identity blocked: the document image is unreadable."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "app-4-document",
+      "scope": "case-app-4"
+    }
+  },
+  {
+    "agent": "kyc",
+    "args": [
+      "recall",
+      "--about",
+      "passport-scan",
+      "--scope",
+      "case-app-4"
+    ],
+    "now": "2026-11-11T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "passport-scan"
+          ],
+          "agent": "kyc",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "verify-identity blocked: the document image is unreadable.",
+          "claim": "The passport scan for APP-4 is unreadable. Ask the applicant for a new scan.",
+          "generation": 1,
+          "key": "app-4-document",
+          "scope": "case-app-4"
+        }
+      ]
+    }
+  }
+]

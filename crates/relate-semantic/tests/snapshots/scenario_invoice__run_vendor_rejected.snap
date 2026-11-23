@@ -1,0 +1,152 @@
+---
+source: crates/relate-semantic/tests/scenario_invoice.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "vendor-list",
+      "--scope",
+      "case-inv-1042",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "northwind",
+        "vendor-list"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-inv-1042",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "vendor-status",
+      "--claim",
+      "Northwind is not on the approved vendor list.",
+      "--about",
+      "northwind",
+      "--about",
+      "vendor-list",
+      "--scope",
+      "org",
+      "--because",
+      "Checked the approved vendor list for INV-1042 on 2026-11-10."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "vendor-status",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "correct",
+      "vendor-status",
+      "--scope",
+      "org",
+      "--agent",
+      "human",
+      "--claim",
+      "Northwind is not on the approved vendor list. A person approves each Northwind invoice before payment.",
+      "--because",
+      "REV-22 approved paying INV-1042 anyway."
+    ],
+    "now": "2026-11-10T20:00:00Z",
+    "out": {
+      "at": "2026-11-10T20:00:00Z",
+      "generation": 2,
+      "key": "vendor-status",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "log",
+      "vendor-status",
+      "--json"
+    ],
+    "now": "2026-11-10T20:00:00Z",
+    "out": {
+      "generations": [
+        {
+          "about": [
+            "northwind",
+            "vendor-list"
+          ],
+          "agent": "human",
+          "at": "2026-11-10T20:00:00Z",
+          "because": "REV-22 approved paying INV-1042 anyway.",
+          "claim": "Northwind is not on the approved vendor list. A person approves each Northwind invoice before payment.",
+          "forgotten": false,
+          "generation": 2,
+          "key": "vendor-status",
+          "live": true,
+          "scope": "org"
+        },
+        {
+          "about": [
+            "northwind",
+            "vendor-list"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Checked the approved vendor list for INV-1042 on 2026-11-10.",
+          "claim": "Northwind is not on the approved vendor list.",
+          "forgotten": false,
+          "generation": 1,
+          "key": "vendor-status",
+          "live": false,
+          "scope": "org"
+        }
+      ],
+      "key": "vendor-status"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "vendor-list"
+    ],
+    "now": "2026-11-13T20:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "northwind",
+            "vendor-list"
+          ],
+          "agent": "human",
+          "at": "2026-11-10T20:00:00Z",
+          "because": "REV-22 approved paying INV-1042 anyway.",
+          "claim": "Northwind is not on the approved vendor list. A person approves each Northwind invoice before payment.",
+          "generation": 2,
+          "key": "vendor-status",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

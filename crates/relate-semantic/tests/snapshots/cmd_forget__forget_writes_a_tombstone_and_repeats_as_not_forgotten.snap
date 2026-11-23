@@ -1,0 +1,11 @@
+---
+source: crates/relate-semantic/tests/cmd_forget.rs
+expression: out
+---
+{
+  "at": "2026-11-17T17:00:00Z",
+  "forgotten": true,
+  "generation": 2,
+  "key": "widget-price",
+  "scope": "org"
+}

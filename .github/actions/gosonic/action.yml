@@ -1,0 +1,53 @@
+name: Run a Sonic stage
+description: Download the gosonic binary from sonic-init and run one stage from .sonic/ci.yml.
+
+inputs:
+  stage:
+    description: Stage or suite name in .sonic/ci.yml
+    required: true
+  matrix:
+    description: Optional gosonic --matrix value, for example scenario=invoice
+    required: false
+    default: ""
+  cache-target:
+    description: Subdirectory of the cargo-target volume this stage writes
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: gosonic
+        path: ${{ runner.temp }}/gosonic-bin
+
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: sonic-${{ inputs.cache-target }}-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          sonic-${{ inputs.cache-target }}-
+
+    - name: Seed Sonic cargo volumes
+      shell: bash
+      run: bash scripts/sonic-cache-sync.sh seed "${{ inputs.cache-target }}"
+
+    - name: Run Sonic stage
+      shell: bash
+      run: |
+        set -euo pipefail
+        install -m 0755 "${{ runner.temp }}/gosonic-bin/gosonic" /usr/local/bin/gosonic
+        args=(ci run)
+        if [[ -n "${{ inputs.matrix }}" ]]; then
+          args+=(--matrix "${{ inputs.matrix }}")
+        fi
+        args+=("${{ inputs.stage }}")
+        gosonic "${args[@]}"
+
+    - name: Save Sonic cargo volumes
+      if: always()
+      shell: bash
+      run: bash scripts/sonic-cache-sync.sh save "${{ inputs.cache-target }}"

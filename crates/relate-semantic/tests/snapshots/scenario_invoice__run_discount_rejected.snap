@@ -1,0 +1,144 @@
+---
+source: crates/relate-semantic/tests/scenario_invoice.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "discounts",
+      "--scope",
+      "case-inv-1042",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [
+        "northwind",
+        "discounts"
+      ],
+      "action": "none",
+      "keys": [],
+      "scopes": [
+        "case-inv-1042",
+        "org"
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--about",
+      "discounts",
+      "--scope",
+      "org",
+      "--because",
+      "Read from NW-2024 section 3 while checking INV-1042."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "review-outcome",
+      "--claim",
+      "REV-21 rejected INV-1042. Do not pay it.",
+      "--about",
+      "inv-1042",
+      "--scope",
+      "case-inv-1042",
+      "--because",
+      "human-review result rejected on REV-21."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "review-outcome",
+      "scope": "case-inv-1042"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--key",
+      "review-outcome",
+      "--scope",
+      "case-inv-1042"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "inv-1042"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "human-review result rejected on REV-21.",
+          "claim": "REV-21 rejected INV-1042. Do not pay it.",
+          "generation": 1,
+          "key": "review-outcome",
+          "scope": "case-inv-1042"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "prune",
+      "--scope",
+      "case-inv-1042"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "generations": 1,
+      "keys": 1,
+      "pruned": "case-inv-1042"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--key",
+      "review-outcome",
+      "--scope",
+      "case-inv-1042"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "about": [],
+      "action": "none",
+      "keys": [
+        "review-outcome"
+      ],
+      "scopes": [
+        "case-inv-1042"
+      ]
+    }
+  }
+]

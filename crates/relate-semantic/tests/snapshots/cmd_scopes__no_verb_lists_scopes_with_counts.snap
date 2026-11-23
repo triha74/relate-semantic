@@ -1,0 +1,18 @@
+---
+source: crates/relate-semantic/tests/cmd_scopes.rs
+expression: out
+---
+{
+  "scopes": [
+    {
+      "generations": 2,
+      "live": 0,
+      "name": "case-inv-1042"
+    },
+    {
+      "generations": 2,
+      "live": 1,
+      "name": "org"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+/target
+**/*.rs.bk
+.relate-semantic
+.sonic-logs
+*.rl
+.DS_Store
+
+# gosonic CI logs
+.logs/

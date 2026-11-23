@@ -1,0 +1,100 @@
+---
+source: crates/relate-semantic/tests/scenario_incident.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--key",
+      "checkout-runbook",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "checkout",
+            "runbook"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "INC-311: draining and rolling back restored checkout in 12 minutes. PM-14.",
+          "claim": "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy.",
+          "generation": 1,
+          "key": "checkout-runbook",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "checkout"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "narrow",
+      "fix": "relate-semantic recall --about checkout --key checkout-dashboards",
+      "keys": [
+        {
+          "about": [
+            "checkout",
+            "dashboards"
+          ],
+          "key": "checkout-dashboards",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "checkout",
+            "database"
+          ],
+          "key": "checkout-db",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "checkout",
+            "flags"
+          ],
+          "key": "checkout-flags",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "checkout",
+            "owners"
+          ],
+          "key": "checkout-owners",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "checkout",
+            "runbook"
+          ],
+          "key": "checkout-runbook",
+          "scope": "org"
+        },
+        {
+          "about": [
+            "checkout",
+            "vendor"
+          ],
+          "key": "checkout-vendor",
+          "scope": "org"
+        }
+      ],
+      "limit": 5,
+      "matched": 6
+    }
+  }
+]

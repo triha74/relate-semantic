@@ -1,0 +1,124 @@
+---
+source: crates/relate-semantic/tests/scenario_invoice.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--about",
+      "discounts",
+      "--scope",
+      "org",
+      "--because",
+      "Read from NW-2024 section 3 while checking INV-1042."
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--scope",
+      "case-inv-1042",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "discounts",
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from NW-2024 section 3 while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "remember",
+      "widget-price",
+      "--claim",
+      "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "--about",
+      "northwind",
+      "--about",
+      "nw-2024",
+      "--about",
+      "discounts",
+      "--scope",
+      "org",
+      "--because",
+      "Read from NW-2024 section 3 while checking INV-1042."
+    ],
+    "now": "2026-11-10T19:00:00Z",
+    "out": {
+      "at": "2026-11-10T18:00:00Z",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "invoices",
+    "args": [
+      "recall",
+      "--key",
+      "widget-price",
+      "--scope",
+      "case-inv-1042",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T19:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "discounts",
+            "northwind",
+            "nw-2024"
+          ],
+          "agent": "invoices",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "Read from NW-2024 section 3 while checking INV-1042.",
+          "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+          "generation": 1,
+          "key": "widget-price",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

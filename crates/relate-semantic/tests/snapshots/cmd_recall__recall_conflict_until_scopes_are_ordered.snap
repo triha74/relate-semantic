@@ -1,0 +1,13 @@
+---
+source: crates/relate-semantic/tests/cmd_recall.rs
+expression: out
+---
+{
+  "action": "conflict",
+  "fix": "relate-semantic recall --key widget-price --scope case-inv-1042 --scope org",
+  "key": "widget-price",
+  "scopes": [
+    "case-inv-1042",
+    "org"
+  ]
+}

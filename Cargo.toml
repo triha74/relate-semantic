@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = ["crates/relate-semantic-core", "crates/relate-semantic"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+rust-version = "1.88"
+publish = false
+
+[workspace.dependencies]
+relate = { git = "https://github.com/relatedb/relate", tag = "v1.0.1" }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+proptest = "1"

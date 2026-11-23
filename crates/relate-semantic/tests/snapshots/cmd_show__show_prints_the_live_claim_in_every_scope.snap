@@ -1,0 +1,35 @@
+---
+source: crates/relate-semantic/tests/cmd_show.rs
+expression: redact(&out)
+---
+{
+  "key": "widget-price",
+  "memories": [
+    {
+      "about": [
+        "northwind"
+      ],
+      "agent": "invoices",
+      "at": "[time]",
+      "because": "test",
+      "claim": "widget-price in case-inv-1042",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "case-inv-1042"
+    },
+    {
+      "about": [
+        "discounts",
+        "northwind",
+        "nw-2024"
+      ],
+      "agent": "invoices",
+      "at": "[time]",
+      "because": "Read from the agreement while checking INV-1042.",
+      "claim": "Under NW-2024, widgets are $100, with 10% off a widget line over $5000.",
+      "generation": 1,
+      "key": "widget-price",
+      "scope": "org"
+    }
+  ]
+}

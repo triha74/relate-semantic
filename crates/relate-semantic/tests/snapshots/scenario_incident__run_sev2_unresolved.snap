@@ -1,0 +1,95 @@
+---
+source: crates/relate-semantic/tests/scenario_incident.rs
+expression: t.steps()
+---
+[
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "checkout",
+      "--about",
+      "runbook",
+      "--scope",
+      "case-inc-312",
+      "--scope",
+      "org"
+    ],
+    "now": "2026-11-10T18:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "checkout",
+            "runbook"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T18:00:00Z",
+          "because": "INC-311: draining and rolling back restored checkout in 12 minutes. PM-14.",
+          "claim": "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy.",
+          "generation": 1,
+          "key": "checkout-runbook",
+          "scope": "org"
+        }
+      ]
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "correct",
+      "checkout-runbook",
+      "--scope",
+      "org",
+      "--claim",
+      "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy. If search is still slow 15 minutes later, page the search vendor.",
+      "--about",
+      "checkout",
+      "--about",
+      "runbook",
+      "--about",
+      "search",
+      "--because",
+      "INC-312: the rollback did not fix search. The vendor fixed it 20 minutes after the page."
+    ],
+    "now": "2026-11-10T21:00:00Z",
+    "out": {
+      "at": "2026-11-10T21:00:00Z",
+      "generation": 2,
+      "key": "checkout-runbook",
+      "scope": "org"
+    }
+  },
+  {
+    "agent": "oncall",
+    "args": [
+      "recall",
+      "--about",
+      "search",
+      "--about",
+      "runbook"
+    ],
+    "now": "2026-11-12T21:00:00Z",
+    "out": {
+      "action": "use",
+      "memories": [
+        {
+          "about": [
+            "checkout",
+            "runbook",
+            "search"
+          ],
+          "agent": "oncall",
+          "at": "2026-11-10T21:00:00Z",
+          "because": "INC-312: the rollback did not fix search. The vendor fixed it 20 minutes after the page.",
+          "claim": "When checkout is down after a deploy, drain the checkout pool, then roll back the deploy. If search is still slow 15 minutes later, page the search vendor.",
+          "generation": 2,
+          "key": "checkout-runbook",
+          "scope": "org"
+        }
+      ]
+    }
+  }
+]

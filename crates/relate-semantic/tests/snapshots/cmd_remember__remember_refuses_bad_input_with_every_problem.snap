@@ -1,0 +1,44 @@
+---
+source: crates/relate-semantic/tests/cmd_remember.rs
+expression: err
+---
+{
+  "error": {
+    "code": "bad_slug",
+    "errors": [
+      {
+        "code": "bad_slug",
+        "field": "key",
+        "fix": "use widget-price as the key",
+        "message": "key 'Widget Price' is not a slug"
+      },
+      {
+        "code": "bad_slug",
+        "field": "about",
+        "fix": "pass --about north-wind",
+        "message": "--about 'North Wind' is not a slug"
+      },
+      {
+        "code": "duplicate_value",
+        "field": "about",
+        "fix": "pass each --about once",
+        "message": "--about North Wind is repeated"
+      },
+      {
+        "code": "bad_slug",
+        "field": "scope",
+        "fix": "pass --scope org",
+        "message": "--scope 'Org' is not a slug"
+      },
+      {
+        "code": "empty_field",
+        "field": "claim",
+        "fix": "write the fact in --claim",
+        "message": "--claim is blank"
+      }
+    ],
+    "fix": "relate-semantic remember widget-price --claim TEXT --about north-wind --scope org --because TEXT",
+    "message": "key 'Widget Price' is not a slug",
+    "retryable": false
+  }
+}
